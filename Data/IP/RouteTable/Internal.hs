@@ -186,6 +186,22 @@ search k1 (Node k2 tb2 vl l r) res
 ----------------------------------------------------------------
 
 {-|
+  The 'subLookup' function looks up 'IPRTable' with a key of 'AddrRange'
+  and returns True if any of key's subnets are in IPRTable
+-}
+subLookup :: Routable k => AddrRange k -> IPRTable k a -> Bool
+subLookup _ Nil = False
+subLookup k1 (Node k2 tb2 Nothing l r)
+    | k1 >:> k2 = True
+    | k2 >:> k1 = if isLeft k1 tb2
+                  then subLookup k1 l
+                  else subLookup k1 r
+    | otherwise = False
+subLookup _ _   = True
+
+----------------------------------------------------------------
+
+{-|
   The 'findMatch' function looks up 'IPRTable' with a key of 'AddrRange'.
   If the key matches routing informations in 'IPRTable', they are
   returned.
