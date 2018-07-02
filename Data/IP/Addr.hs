@@ -30,8 +30,8 @@ True
 True
 -}
 
-data IP = IPv4 { ipv4 :: IPv4 }
-        | IPv6 { ipv6 :: IPv6 }
+data IP = IPv4 { ipv4 :: !IPv4 }
+        | IPv6 { ipv6 :: !IPv6 }
         deriving (Data,Generic,Typeable)
 
 {-|

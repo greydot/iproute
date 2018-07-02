@@ -13,7 +13,7 @@ module Data.IP (
   , fromSockAddr
   -- * IP range data
   , IPRange (..)
-  , AddrRange (addr, mask, mlen)
+  , AddrRange (addr, mlen)
   -- * Address class
   , Addr (..)
   , makeAddrRange, (>:>), isMatchedTo, addrRangePair

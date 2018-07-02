@@ -27,8 +27,8 @@ True
 True
 -}
 
-data IPRange = IPv4Range { ipv4range :: AddrRange IPv4 }
-             | IPv6Range { ipv6range :: AddrRange IPv6 }
+data IPRange = IPv4Range { ipv4range :: !(AddrRange IPv4)}
+             | IPv6Range { ipv6range :: !(AddrRange IPv6) }
         deriving (Eq, Ord, Data, Generic, Typeable)
 
 ----------------------------------------------------------------
@@ -53,8 +53,6 @@ data IPRange = IPv4Range { ipv4range :: AddrRange IPv4 }
 data AddrRange a = AddrRange {
         -- |The 'addr' function returns an address from 'AddrRange'.
         addr :: !a
-        -- |The 'mask' function returns a contiguous 'IP' mask from 'AddrRange'.
-      , mask :: !a
         -- |The 'mlen' function returns a mask length from 'AddrRange'.
       , mlen :: {-# UNPACK #-} !Word8
     }
@@ -108,9 +106,8 @@ ip4range = do
     ip <- ip4
     len <- option 32 $ char '/' >> dig
     check len
-    let msk = maskIPv4 len
-        adr = ip `maskedIPv4` msk
-    return $ AddrRange adr msk len
+    let adr = ip `maskedIPv4` maskIPv4 len
+    return $ AddrRange adr len
   where
     check len = when (len < 0 || 32 < len) (fail "IPv4 mask length")
 
@@ -122,9 +119,8 @@ ip6range = do
     ip <- ip6
     len <- option 128 $ char '/' >> dig
     check len
-    let msk = maskIPv6 len
-        adr = ip `maskedIPv6` msk
-    return $ AddrRange adr msk len
+    let adr = ip `maskedIPv6` maskIPv6 len
+    return $ AddrRange adr len
   where
     check len = when (len < 0 || 128 < len) (fail ("IPv6 mask length: " ++ show len))
 

@@ -64,7 +64,7 @@ True
 False
 -}
 (>:>) :: Addr a => AddrRange a -> AddrRange a -> Bool
-a >:> b = mlen a <= mlen b && (addr b `masked` mask a) == addr a
+a >:> b = mlen a <= mlen b && (addr b `masked` intToMask (fromIntegral $ mlen a)) == addr a
 
 {-|
   The 'toMatchedTo' function take an 'Addr' address and an 'AddrRange',
@@ -81,7 +81,7 @@ False
 -}
 
 isMatchedTo :: Addr a => a -> AddrRange a -> Bool
-isMatchedTo a r = a `masked` mask r == addr r
+isMatchedTo a r = a `masked` intToMask (fromIntegral $ mlen r) == addr r
 
 {-|
   The 'makeAddrRange' functions takes an 'Addr' address and a mask
@@ -94,7 +94,7 @@ isMatchedTo a r = a `masked` mask r == addr r
 2000::/8
 -}
 makeAddrRange :: Addr a => a -> Int -> AddrRange a
-makeAddrRange ad len = AddrRange adr msk (checkLen len)
+makeAddrRange ad len = AddrRange adr (checkLen len)
   where
     checkLen l | l < 0 || l > 128 = error "makeAddrRange: invalid length argument"
                | otherwise = fromIntegral l
@@ -121,4 +121,4 @@ ipv4RangeToIPv6 range =
 (2000::,8)
 -}
 addrRangePair :: Addr a => AddrRange a -> (a, Int)
-addrRangePair (AddrRange adr _ len) = (adr, fromIntegral len)
+addrRangePair (AddrRange adr len) = (adr, fromIntegral len)
