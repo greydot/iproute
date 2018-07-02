@@ -37,7 +37,7 @@ class Eq a => Addr a where
       ::ffff
 
     -}
-    intToMask :: Int -> a
+    intToMask :: Integral i => i -> a
 
 instance Addr IPv4 where
     masked    = maskedIPv4
@@ -64,7 +64,7 @@ True
 False
 -}
 (>:>) :: Addr a => AddrRange a -> AddrRange a -> Bool
-a >:> b = mlen a <= mlen b && (addr b `masked` intToMask (fromIntegral $ mlen a)) == addr a
+a >:> b = mlen a <= mlen b && (addr b `masked` intToMask (mlen a)) == addr a
 
 {-|
   The 'toMatchedTo' function take an 'Addr' address and an 'AddrRange',
@@ -81,7 +81,7 @@ False
 -}
 
 isMatchedTo :: Addr a => a -> AddrRange a -> Bool
-isMatchedTo a r = a `masked` intToMask (fromIntegral $ mlen r) == addr r
+isMatchedTo a r = a `masked` intToMask (mlen r) == addr r
 
 {-|
   The 'makeAddrRange' functions takes an 'Addr' address and a mask
