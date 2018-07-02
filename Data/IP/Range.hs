@@ -10,6 +10,7 @@ import Data.IP.Addr
 import Data.IP.Mask
 import Data.String
 import Data.Typeable (Typeable)
+import Data.Word (Word8)
 import Text.Appar.String
 import GHC.Generics
 
@@ -55,7 +56,7 @@ data AddrRange a = AddrRange {
         -- |The 'mask' function returns a contiguous 'IP' mask from 'AddrRange'.
       , mask :: !a
         -- |The 'mlen' function returns a mask length from 'AddrRange'.
-      , mlen :: {-# UNPACK #-} !Int
+      , mlen :: {-# UNPACK #-} !Word8
     }
     deriving (Eq, Ord, Data, Generic, Typeable)
 

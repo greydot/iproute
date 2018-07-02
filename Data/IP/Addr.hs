@@ -388,11 +388,11 @@ instance IsString IPv6 where
 -- IPv4 Parser
 --
 
-dig :: Parser Int
+dig :: Integral a => Parser a
 dig = 0 <$ char '0'
   <|> toInt <$> oneOf ['1'..'9'] <*> many digit
   where
-    toInt n ns = foldl' (\x y -> x * 10 + y) 0 . map digitToInt $ n : ns
+    toInt n ns = fromIntegral $ foldl' (\x y -> x * 10 + y) 0 . map digitToInt $ n : ns
 
 ip4 :: Parser IPv4
 ip4 = skipSpaces >> toIPv4 <$> ip4'

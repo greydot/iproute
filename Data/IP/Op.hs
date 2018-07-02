@@ -94,8 +94,10 @@ isMatchedTo a r = a `masked` mask r == addr r
 2000::/8
 -}
 makeAddrRange :: Addr a => a -> Int -> AddrRange a
-makeAddrRange ad len = AddrRange adr msk len
+makeAddrRange ad len = AddrRange adr msk (checkLen len)
   where
+    checkLen l | l < 0 || l > 128 = error "makeAddrRange: invalid length argument"
+               | otherwise = fromIntegral l
     msk = intToMask len
     adr = ad `masked` msk
 
@@ -119,4 +121,4 @@ ipv4RangeToIPv6 range =
 (2000::,8)
 -}
 addrRangePair :: Addr a => AddrRange a -> (a, Int)
-addrRangePair (AddrRange adr _ len) = (adr, len)
+addrRangePair (AddrRange adr _ len) = (adr, fromIntegral len)

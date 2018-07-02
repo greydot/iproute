@@ -175,7 +175,7 @@ glue n k1 k2
     mk = intToMask n
 
 keyToTestBit :: Routable k => AddrRange k -> k
-keyToTestBit = intToTBit . mlen
+keyToTestBit = intToTBit . fromIntegral . mlen
 
 isLeft :: Routable k => AddrRange k -> k -> Bool
 isLeft adr = isZero (addr adr)

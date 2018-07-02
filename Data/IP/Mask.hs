@@ -4,14 +4,14 @@ import Data.Bits
 import Data.IP.Addr
 import Data.Word
 
-maskIPv4 :: Int -> IPv4
+maskIPv4 :: Integral a => a -> IPv4
 maskIPv4 len =
-    IP4 $ complement $ 0xffffffff `shift` (-len)
+    IP4 $ complement $ 0xffffffff `shift` fromIntegral (-len)
 
-maskIPv6 :: Int -> IPv6
+maskIPv6 :: Integral a => a -> IPv6
 maskIPv6 len =
     IP6 $ toIP6Addr $ bimapTup complement $
-            (0xffffffffffffffff, 0xffffffffffffffff) `shift128` (-len)
+            (0xffffffffffffffff, 0xffffffffffffffff) `shift128` fromIntegral (-len)
  where
    bimapTup f (x,y) = (f x, f y)
 
